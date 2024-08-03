@@ -23,3 +23,5 @@ app.listen(port, () => {
   console.log(`Running on port : ${port}`);
 }); 
  
+
+// AJOUT DE LIKES, FAVORIS ET POSTS POUR UN UTILISATEUR EN ATTENTE DE CREATION DES POSTS 
