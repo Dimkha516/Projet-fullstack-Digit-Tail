@@ -5,7 +5,12 @@ const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
 // GET ALL POSTS:
-
+module.exports.getAllPosts = async (req, res) => {
+  const allPosts = await PostsModel.find();
+  allPosts
+    ? res.status(200).json({ allPosts })
+    : res.status(400).json({ message: "Aucun post trouvé" });
+};
 // GET ONE POST:
 
 // CREATE POST:
@@ -35,7 +40,7 @@ module.exports.addPost = async (req, res) => {
       { new: true, upsert: true }
     );
 
-    res.status(201).json({newPost});
+    res.status(201).json({ newPost });
   } catch (err) {
     res.status(400).json({ message: "Erreur d'ajout de post " + err });
   }

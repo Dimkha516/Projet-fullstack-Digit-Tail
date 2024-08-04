@@ -31,6 +31,8 @@ module.exports.signIn = async (req, res) => {
   try {
     const user = await UsersModel.login(email, password);
     const token = createToken(user._id);
+    res.cookie("jwt", token, { httpOnly: true, maxAge });
+    // console.log(token);
     res.status(200).json({ message: `Authentification réussie: ${user._id}` });
   } catch (err) {
     res.status(400).json({ message: "Login Error " + err });
@@ -40,5 +42,5 @@ module.exports.signIn = async (req, res) => {
 // LOGOUT:
 module.exports.logout = (req, res) => {
   res.cookie("jwt", "", { maxAge: 1 });
-  res.status(200).json({ message: "Déconnexion réussie !" });
+  res.redirect("/api/posts");
 };

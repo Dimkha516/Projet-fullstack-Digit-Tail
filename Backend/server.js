@@ -1,6 +1,6 @@
 const express = require("express");
-const ConnectToDB = require("./config/database");
 const app = express();
+const ConnectToDB = require("./config/database");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv").config();
@@ -8,6 +8,8 @@ const port = process.env.PORT;
 const usersRoutes = require("./Routes/usersRoutes");
 const articlesRoutes = require("./Routes/articlesRoutes");
 const postsRoutes = require("./Routes/postsRoutes");
+const { checkUser, requireAuth } = require("./Middlewares/auth.middleware");
+
 // CONNEXION AU CLOUD:
 ConnectToDB();
 
@@ -15,7 +17,13 @@ ConnectToDB();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-
+ 
+// JWT:
+app.get("*", checkUser);
+app.get("/jwtid", requireAuth, (req, res) => {
+  res.status(200).send(res.locals.user._id);
+});
+ 
 // ROUTES:
 app.use("/api/users", usersRoutes);
 app.use("/api/articles", articlesRoutes);
@@ -27,3 +35,4 @@ app.listen(port, () => {
 });
 
 // AJOUT DE LIKES, FAVORIS ET POSTS POUR UN UTILISATEUR EN ATTENTE DE CREATION DES POSTS
+ 
