@@ -2,56 +2,61 @@ const mongoose = require("mongoose");
 const { isEmail } = require("validator");
 const bcryptjs = require("bcryptjs");
 
-const usersModel = mongoose.Schema({
-  pseudo: {
-    type: String,
-    required: true,
-    unique: true,
-    minLength: 3,
-    mawLength: 16,
-    trim: true,
-  },
+const usersModel = mongoose.Schema(
+  {
+    pseudo: {
+      type: String,
+      required: true,
+      unique: true,
+      minLength: 3,
+      mawLength: 16,
+      trim: true,
+    },
 
-  email: {
-    type: String,
-    require: true,
-    unique: true,
-    trim: true,
-    lowercase: true,
-    validate: [isEmail],
-  },
+    email: {
+      type: String,
+      require: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+      validate: [isEmail],
+    },
 
-  password: {
-    type: String,
-    required: true,
-    minLength: 6,
-    maxLength: 64,
+    password: {
+      type: String,
+      required: true,
+      minLength: 6,
+      maxLength: 64,
+    },
+    profil: {
+      type: String,
+      enum: ["vendeur", "visiteur"],
+      required: true,
+    },
+    picture: {
+      type: String,
+      default: "./uploads/profil/random.jpg",
+    },
+    followers: {
+      type: [String],
+    },
+    followings: {
+      type: [String],
+    },
+    posts: {
+      type: [String],
+    },
+    favoris: {
+      type: [String],
+    },
+    likes: {
+      type: [String],
+    },
   },
-  profil:{
-    type: String,
-    enum: ['vendeur', 'visiteur'],
-    required: true
-  },
-  picture: {
-    type: String,
-    default: "./uploads/profil/random.jpg",
-  },
-  followers: {
-    type: [String],
-  },
-  followings: {
-    type: [String],
-  },
-  posts: {
-    type: [String],
-  },
-  favoris: {
-    type: [String],
-  },
-  likes: {
-    type: [String],
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 // CRYPTAGE DU PASSWORD À L'INSCRIPTION:
 usersModel.pre("save", async function (next) {
